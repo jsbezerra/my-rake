@@ -8,7 +8,20 @@ class Task
   end
 
   def invoke
+    # do not run same task twice
+    return if @already_run
+    # resolve dependencies
+    @deps.each { |dep|
+      TASKS[dep].invoke
+    }
+    # execute task
+    execute
+    # mark as executed
+    @already_run = true
+  end
 
+  def execute
+    @action.call
   end
 end
 
